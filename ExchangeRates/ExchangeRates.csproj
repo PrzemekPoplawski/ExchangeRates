@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiConnection.cs" />
+    <Compile Include="ClientInfocs.cs" />
     <Compile Include="CurrencyData.cs" />
+    <Compile Include="FormatDate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

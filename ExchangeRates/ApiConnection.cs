@@ -8,23 +8,41 @@ using System.Threading.Tasks;
 
 namespace ExchangeRates
 {
-    static class ApiConnection
+    public class ApiConnection
     {
-        private static string path = "http://api.nbp.pl/api/exchangerates/rates/a/chf/";      
+        public string currency;
+        public string date;
+        private HttpClient client = new HttpClient();
 
-        private static HttpClient client = new HttpClient();
+        public ApiConnection(string date, string currency)
+        {
+            this.currency = currency;
+            this.date = date;
+        }
 
-        public static async Task<CurrencyData> getExchangeRate()
+        private string GetCorectPath()
+        {
+            var _path = "http://api.nbp.pl/api/exchangerates/rates/c/" + currency + "/" + date + "/?format=json";
+            return _path;
+        }
+        
+
+        public async Task<CurrencyData> getExchangeRate()
         {
             CurrencyData data = null;
-            HttpResponseMessage responseMessage = await client.GetAsync(path);
+            HttpResponseMessage responseMessage = await client.GetAsync(GetCorectPath());
 
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                string responseString = await responseMessage.Content.ReadAsStringAsync();
-                data = JsonConvert.DeserializeObject<CurrencyData>(responseString);
-            }
-
+            
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    string responseString = await responseMessage.Content.ReadAsStringAsync();
+                    data = JsonConvert.DeserializeObject<CurrencyData>(responseString);
+                }
+                else
+                {
+                    Console.WriteLine("****Currency or date are invalid****");
+                }
+            
             return data;
         }
 

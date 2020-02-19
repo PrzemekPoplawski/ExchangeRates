@@ -1,24 +1,32 @@
 ﻿//using System;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ExchangeRates
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+
             Console.WriteLine("Insert currency:");
-            float currency = float.Parse(Console.ReadLine());
+            string currency = Console.ReadLine();
+            Console.WriteLine("Insert date(yyyy-mm-dd):");
+            DateTime date = DateTime.Parse(Console.ReadLine());
 
-            Task<CurrencyData> response = ApiConnection.getExchangeRate();
-            CurrencyData currencyRate = response.Result;
-
-            Console.WriteLine($"Actual exchange rate: {currencyRate.gold}");
+            var api = new ApiConnection(FormatDate.ConvertDate(date), currency); ;
+            var res = api.getExchangeRate();
+            
+            
+            Console.WriteLine($"Actual exchange rate: {res.Result.rates[0].bid}");
             Console.ReadLine();
         }
+
     }
+
 }
